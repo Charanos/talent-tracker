@@ -1,15 +1,434 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200..900;1,200..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Nunito", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-display: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+
+  /* Dark theme colors - matching original variable names */
+  --color-dark-200: #d1d5db;
+  --color-light-blue-100: rgba(255, 255, 255, 0.05);
+  --color-light-blue-200: rgba(255, 255, 255, 0.1);
+
+  /* Badge colors for dark theme */
+  --color-badge-green: #065f46;
+  --color-badge-red: #7f1d1d;
+  --color-badge-yellow: #78350f;
+
+  --color-badge-green-text: #10b981;
+  --color-badge-red-text: #ef4444;
+  --color-badge-yellow-text: #f59e0b;
+
+  /* Glass effect colors */
+  --color-glass-bg: rgba(255, 255, 255, 0.05);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --color-glass-hover: rgba(255, 255, 255, 0.08);
+
+  /* Primary gradient colors */
+  --color-primary-start: #8e98ff;
+  --color-primary-end: #606beb;
+  --color-primary-hover-start: #717dff;
+  --color-primary-hover-end: #4957eb;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  color: #ededed;
+  background: #0b0d0e url("/bg-gradient-overlay.svg");
+  background-size: cover;
+  scroll-behavior: smooth;
+  font-family: "Nunito", sans-serif;
+}
 
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
+header,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button {
+  color: #ededed;
+  font-family: "Montserrat", sans-serif;
+}
+
+main {
+  @apply min-h-screen pt-10;
+  background: transparent;
+}
+
+h1 {
+  @apply max-sm:text-[3rem] text-6xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
+  font-family: "Montserrat", sans-serif;
+}
+
+h2 {
+  @apply max-sm:text-xl text-3xl;
+  color: var(--color-dark-200);
+  font-family: "Montserrat", sans-serif;
+}
+
+label {
+  color: var(--color-dark-200);
+  font-family: "Montserrat", sans-serif;
+}
+
+input {
+  @apply w-full p-4 rounded-2xl focus:outline-none;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  color: #ededed;
+  font-size: 14px;
+  font-family: "Nunito", sans-serif;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+textarea {
+  @apply w-full p-4 rounded-2xl focus:outline-none;
+  background: var(--color-glass-bg);
+  border: 1px solid var(--color-glass-border);
+  color: #ededed;
+  font-family: "Nunito", sans-serif;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-primary-start);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(142, 152, 255, 0.2);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+form {
+  @apply flex flex-col items-start gap-8 w-full;
+}
+
+@layer components {
+  .monty {
+    font-family: "Montserrat", sans-serif;
   }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#AB8C95] via-[#ffffff] to-[#8E97C5];
+  }
+
+  .gradient-border {
+    background: linear-gradient(
+      to bottom,
+      var(--color-light-blue-100),
+      var(--color-light-blue-200)
+    );
+    @apply p-4 rounded-2xl;
+    backdrop-filter: blur(15px);
+  }
+
+  .primary-button {
+    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full font-semibold;
+    font-family: "Montserrat", sans-serif;
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .primary-button:hover {
+    @apply primary-gradient-hover;
+    transform: translateY(-1px);
+  }
+
+  .resume-nav {
+    @apply flex flex-row justify-between items-center p-4;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-glass-bg);
+    backdrop-filter: blur(10px);
+  }
+
+  .resume-summary {
+    @apply flex flex-row items-center justify-center p-4 gap-4;
+  }
+
+  .resume-summary .category {
+    @apply flex flex-row gap-2 items-center rounded-2xl p-4 w-full justify-between;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .back-button {
+    @apply flex flex-row items-center gap-2 rounded-lg p-2;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    color: #ededed;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .back-button:hover {
+    background: var(--color-glass-hover);
+    transform: translateX(-2px);
+  }
+
+  .auth-button {
+    @apply primary-gradient rounded-full py-4 px-8 cursor-pointer w-[600px] max-md:w-full text-3xl font-semibold text-white;
+    font-family: "Montserrat", sans-serif;
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .auth-button:hover {
+    @apply primary-gradient-hover;
+    transform: translateY(-2px);
+  }
+
+  .main-section {
+    @apply flex flex-col items-center gap-8 pt-12 max-sm:mx-2 mx-15 pb-5;
+  }
+
+  .page-heading {
+    @apply flex flex-col items-center gap-8 max-w-4xl text-center max-sm:gap-4;
+  }
+
+  .resumes-section {
+    @apply flex flex-wrap max-md:flex-col max-md:gap-4 gap-6 items-start max-md:items-center w-full max-w-[1850px] justify-evenly;
+  }
+
+  .resume-card {
+    @apply flex flex-col gap-8 h-[560px] w-[350px] lg:w-[430px] xl:w-[490px] rounded-2xl p-4;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(15px);
+    transition: all 0.3s ease;
+  }
+
+  .resume-card:hover {
+    background: var(--color-glass-hover);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .resume-card-header {
+    @apply flex flex-row gap-2 justify-between min-h-[110px] max-sm:flex-col items-center max-md:justify-center max-md:items-center;
+  }
+
+  .feedback-section {
+    @apply flex flex-col gap-8 w-1/2 px-8 max-lg:w-full py-6;
+  }
+
+  .navbar {
+    @apply flex flex-row justify-between items-center rounded-full p-4 w-full px-10 max-w-[1200px] mx-auto;
+    background: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(10px);
+  }
+
+  .score-badge {
+    @apply flex flex-row items-center justify-center py-1 px-2 gap-4 rounded-[96px] font-semibold;
+    font-family: "Montserrat", sans-serif;
+  }
+
+  .form-div {
+    @apply flex flex-col gap-2 w-full items-start;
+  }
+
+  .uplader-drag-area {
+    @apply relative p-8 text-center transition-all duration-700 cursor-pointer rounded-2xl min-h-[208px];
+    background: var(--color-glass-bg);
+    border: 2px dashed var(--color-glass-border);
+    backdrop-filter: blur(10px);
+    color: #ededed;
+  }
+
+  .uplader-drag-area:hover {
+    border-color: var(--color-primary-start);
+    background: var(--color-glass-hover);
+  }
+
+  .uploader-selected-file {
+    @apply flex items-center justify-between p-3 rounded-2xl;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* Badge Styles */
+.badge-green {
+  background-color: var(--color-badge-green);
+  color: var(--color-badge-green-text);
+}
+
+.badge-red {
+  background-color: var(--color-badge-red);
+  color: var(--color-badge-red-text);
+}
+
+.badge-yellow {
+  background-color: var(--color-badge-yellow);
+  color: var(--color-badge-yellow-text);
+}
+
+@utility bg-gradient {
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.8) 60%,
+    rgba(248, 113, 133, 0.3)
+  );
+}
+
+@utility text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#AB8C95] via-[#ffffff] to-[#8E97C5];
+}
+
+@utility gradient-hover {
+  background: linear-gradient(
+    to bottom,
+    var(--color-light-blue-100),
+    var(--color-light-blue-200)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+@utility primary-gradient {
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary-start),
+    var(--color-primary-end)
+  );
+  box-shadow: 0px 10px 30px 0px rgba(102, 120, 239, 0.3);
+}
+
+@utility primary-gradient-hover {
+  background: linear-gradient(
+    to bottom,
+    var(--color-primary-hover-start),
+    var(--color-primary-hover-end)
+  );
+  box-shadow: 0px 15px 35px 0px rgba(102, 120, 239, 0.4);
+}
+
+@utility inset-shadow {
+  box-shadow: inset 0 0 12px 0 rgba(36, 99, 235, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(142, 152, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(142, 152, 255, 0.5);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+html.lenis {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.slide-in {
+  animation: slideIn 0.6s ease-out forwards;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-primary-start);
+  outline-offset: 2px;
+}
+
+/* Enhanced button states */
+button {
+  transition: all 0.3s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* Loading spinner utility */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
