@@ -39,6 +39,10 @@
 
 * {
   box-sizing: border-box;
+  /* GPU acceleration for smoother animations */
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 html,
@@ -46,8 +50,20 @@ body {
   color: #ededed;
   background: #0b0d0e url("/bg-gradient-overlay.svg");
   background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   scroll-behavior: smooth;
   font-family: "Nunito", sans-serif;
+  /* Font antialiasing for smoother text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* Performance optimizations */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-text-size-adjust: 100%;
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
 header,
@@ -59,7 +75,12 @@ h5,
 h6,
 button {
   color: #ededed;
+  font-weight: normal;
   font-family: "Montserrat", sans-serif;
+  /* Enhanced antialiasing for headings */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 main {
@@ -68,12 +89,12 @@ main {
 }
 
 h1 {
-  @apply max-sm:text-[3rem] text-6xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
+  @apply max-sm:text-[3rem] text-4xl text-gradient leading-loose xl:tracking-[-2px] font-medium;
   font-family: "Montserrat", sans-serif;
 }
 
 h2 {
-  @apply max-sm:text-xl text-3xl;
+  @apply max-sm:text-xl text-2xl;
   color: var(--color-dark-200);
   font-family: "Montserrat", sans-serif;
 }
@@ -126,8 +147,122 @@ form {
     font-family: "Montserrat", sans-serif;
   }
 
+  /* Font Antialiasing Utility Classes */
+  .font-smooth {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  .font-smooth-subpixel {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+    text-rendering: optimizeSpeed;
+  }
+
+  .font-smooth-auto {
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+    text-rendering: auto;
+  }
+
+  /* Performance Optimization Classes */
+  .gpu-accelerate {
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .will-change-auto {
+    will-change: auto;
+  }
+
+  /* Optimized Focus States */
+  .focus-ring {
+    outline: none;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .focus-ring:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--color-primary-start),
+      0 0 0 4px rgba(142, 152, 255, 0.2);
+  }
+
+  /* Loading States */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.1) 25%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.1) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  /* Content Loading */
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Staggered animations for lists */
+  .stagger-children > * {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .stagger-children > *:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .stagger-children > *:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .stagger-children > *:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .stagger-children > *:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .stagger-children > *:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-[#AB8C95] via-[#ffffff] to-[#8E97C5];
+    /* Enhance gradient text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* GPU acceleration for gradient text */
+    transform: translateZ(0);
   }
 
   .gradient-border {
@@ -141,15 +276,23 @@ form {
   }
 
   .primary-button {
-    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full font-semibold;
+    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full font-medium;
     font-family: "Montserrat", sans-serif;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
+    /* Performance optimization */
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
   }
 
   .primary-button:hover {
     @apply primary-gradient-hover;
-    transform: translateY(-1px);
+    transform: translateY(-1px) translateZ(0);
+  }
+
+  .primary-button:active {
+    transform: translateY(0) scale(0.98) translateZ(0);
+    transition-duration: 0.1s;
   }
 
   .resume-nav {
@@ -186,7 +329,7 @@ form {
   }
 
   .auth-button {
-    @apply primary-gradient rounded-full py-4 px-8 cursor-pointer w-[600px] max-md:w-full text-3xl font-semibold text-white;
+    @apply primary-gradient rounded-full py-2 px-4 cursor-pointer w-[300px] max-md:w-full text-lg font-semibold text-white;
     font-family: "Montserrat", sans-serif;
     transition: all 0.3s ease;
     border: none;
@@ -198,7 +341,7 @@ form {
   }
 
   .main-section {
-    @apply flex flex-col items-center gap-8 pt-12 max-sm:mx-2 mx-15 pb-5;
+    @apply flex flex-col items-center gap-8 max-sm:mx-2 mx-15 pb-5;
   }
 
   .page-heading {
@@ -206,21 +349,27 @@ form {
   }
 
   .resumes-section {
-    @apply flex flex-wrap max-md:flex-col max-md:gap-4 gap-6 items-start max-md:items-center w-full max-w-[1850px] justify-evenly;
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-md:gap-4 gap-6 items-start max-md:items-center w-full max-w-[1850px] justify-evenly;
   }
 
   .resume-card {
-    @apply flex flex-col gap-8 h-[560px] w-[350px] lg:w-[430px] xl:w-[490px] rounded-2xl p-4;
+    @apply flex flex-col gap-8 h-[560px] w-auto rounded-2xl p-4;
     background: var(--color-glass-bg);
     border: 1px solid var(--color-glass-border);
     backdrop-filter: blur(15px);
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Performance optimization */
+    transform: translateZ(0);
+    will-change: transform, background-color, border-color;
   }
 
   .resume-card:hover {
     background: var(--color-glass-hover);
     border-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
+    transform: translateY(-4px) translateZ(0);
+    box-shadow:
+      0 20px 40px rgba(0, 0, 0, 0.3),
+      0 0 0 1px rgba(255, 255, 255, 0.1);
   }
 
   .resume-card-header {
@@ -248,16 +397,28 @@ form {
   }
 
   .uplader-drag-area {
-    @apply relative p-8 text-center transition-all duration-700 cursor-pointer rounded-2xl min-h-[208px];
+    @apply relative p-8 text-center cursor-pointer rounded-2xl min-h-[208px];
     background: var(--color-glass-bg);
     border: 2px dashed var(--color-glass-border);
     backdrop-filter: blur(10px);
     color: #ededed;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Performance optimization */
+    transform: translateZ(0);
+    will-change: border-color, background-color, transform;
   }
 
   .uplader-drag-area:hover {
     border-color: var(--color-primary-start);
     background: var(--color-glass-hover);
+    transform: scale(1.02) translateZ(0);
+  }
+
+  .uplader-drag-area.drag-over {
+    border-color: var(--color-primary-start);
+    background: rgba(142, 152, 255, 0.1);
+    transform: scale(1.05) translateZ(0);
+    box-shadow: 0 0 20px rgba(142, 152, 255, 0.3);
   }
 
   .uploader-selected-file {
@@ -397,10 +558,68 @@ html.lenis {
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Remove transforms for reduced motion */
+  .resume-card:hover,
+  .primary-button:hover,
+  .back-button:hover {
+    transform: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-glass-border: rgba(255, 255, 255, 0.3);
+    --color-primary-start: #9ca3ff;
+    --color-primary-end: #7b84ff;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[#ffffff] via-[#ffffff] to-[#ffffff];
+  }
+}
+
+/* Print styles */
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  .navbar,
+  .primary-button,
+  .back-button {
+    display: none;
+  }
+
+  .resume-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+}
+
+/* Mobile-first responsive images */
+@media (max-width: 640px) {
+  .bg-gradient-overlay {
+    background-size: 150% auto;
+    background-position: center;
+  }
+}
+
+/* Dark mode system preference override */
+@media (prefers-color-scheme: light) {
+  .force-dark {
+    color-scheme: dark;
   }
 }
 
@@ -415,11 +634,87 @@ select:focus-visible {
 
 /* Enhanced button states */
 button {
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Performance optimization */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 button:active {
-  transform: scale(0.98);
+  transform: scale(0.98) translateZ(0);
+  transition-duration: 0.1s;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Enhanced input states */
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--color-primary-start);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(142, 152, 255, 0.2);
+  transform: translateZ(0);
+}
+
+/* Container Queries Support */
+@container (min-width: 768px) {
+  .resume-card {
+    width: 400px;
+  }
+}
+
+@container (min-width: 1024px) {
+  .resume-card {
+    width: 450px;
+  }
+}
+
+/* Intersection Observer Animation Classes */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Error States */
+.error-state {
+  border-color: var(--color-badge-red-text) !important;
+  background: rgba(239, 68, 68, 0.1);
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Success States */
+.success-state {
+  border-color: var(--color-badge-green-text) !important;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+/* Critical CSS Inlining Classes */
+.critical {
+  font-display: swap;
 }
 
 /* Loading spinner utility */
