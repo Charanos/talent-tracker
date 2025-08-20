@@ -11,17 +11,21 @@ export interface PdfConversionResult {
   async function loadPdfJs(): Promise<any> {
     if (pdfjsLib) return pdfjsLib;
     if (loadPromise) return loadPromise;
-  
+
     isLoading = true;
     // @ts-expect-error - pdfjs-dist/build/pdf.mjs is not a module
     loadPromise = import("pdfjs-dist/build/pdf.mjs").then((lib) => {
-      // Set the worker source to use local file
-      lib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+      // Set the worker source to use local file with proper path
+      lib.GlobalWorkerOptions.workerSrc = new URL('/pdf.worker.min.mjs', window.location.origin).href;
       pdfjsLib = lib;
       isLoading = false;
       return lib;
+    }).catch((error) => {
+      isLoading = false;
+      loadPromise = null;
+      throw new Error(`Failed to load PDF.js: ${error.message}`);
     });
-  
+
     return loadPromise;
   }
   

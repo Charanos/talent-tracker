@@ -9,6 +9,7 @@ import {
   TrendingUp,
   FileText,
 } from "lucide-react";
+import { Link } from "react-router";
 
 const EnhancedHeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -37,7 +38,7 @@ const EnhancedHeroSection = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -46,7 +47,7 @@ const EnhancedHeroSection = () => {
       </div>
 
       {/* Floating Icons */}
-      <div className="absolute inset-0 pointer-events-none">
+      {/* <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-20 animate-bounce delay-100">
           <div className="glass-effect p-3 rounded-xl">
             <BarChart3 className="w-6 h-6 text-blue-400" />
@@ -67,7 +68,7 @@ const EnhancedHeroSection = () => {
             <Zap className="w-6 h-6 text-yellow-400" />
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="relative z-10">
         <div
@@ -107,11 +108,14 @@ const EnhancedHeroSection = () => {
           <div
             className={`flex flex-col sm:flex-row gap-4 items-center mb-12 transition-all duration-1000 delay-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
           >
-            <button className="primary-button group flex items-center gap-3 max-w-xs hover:scale-105">
+            <Link
+              to={"/upload"}
+              className="primary-button group flex items-center gap-3 max-w-xs hover:scale-105"
+            >
               <Upload className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" />
               <span>Upload Resume</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-            </button>
+            </Link>
           </div>
         </div>
       </div>

@@ -5,11 +5,11 @@ const Navbar = () => {
   return (
     <nav className="navbar sticky top-10 z-50">
       <Link to="/">
-        <h2 className="!font-semibold uppercase text-gradient !text-xl">
+        <h2 className="!font-semibold uppercase text-gradient !text-base">
           talenttracker
         </h2>
       </Link>
-      <Link to="/upload" className="capitalize primary-button w-fit">
+      <Link to="/upload" className="capitalize primary-button w-fit !py-1">
         Upload resume
       </Link>
     </nav>

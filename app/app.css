@@ -89,12 +89,12 @@ main {
 }
 
 h1 {
-  @apply max-sm:text-[3rem] text-4xl text-gradient leading-loose xl:tracking-[-2px] font-medium;
+  @apply lg:text-5xl md:text-3xl text-3xl text-gradient leading-loose xl:tracking-[-2px] font-medium;
   font-family: "Montserrat", sans-serif;
 }
 
 h2 {
-  @apply max-sm:text-xl text-2xl;
+  @apply max-sm:text-lg text-base;
   color: var(--color-dark-200);
   font-family: "Montserrat", sans-serif;
 }
@@ -106,7 +106,7 @@ label {
 
 input {
   @apply w-full p-4 rounded-2xl focus:outline-none;
-  background: var(--color-glass-bg);
+  background: rgba(0, 0, 0, 0.781);
   border: 1px solid var(--color-glass-border);
   color: #ededed;
   font-size: 14px;
@@ -117,7 +117,7 @@ input {
 
 textarea {
   @apply w-full p-4 rounded-2xl focus:outline-none;
-  background: var(--color-glass-bg);
+  background: rgba(0, 0, 0, 0.781);
   border: 1px solid var(--color-glass-border);
   color: #ededed;
   font-family: "Nunito", sans-serif;
@@ -341,7 +341,7 @@ form {
   }
 
   .main-section {
-    @apply flex flex-col items-center gap-8 max-sm:mx-2 mx-15 pb-5;
+    @apply flex flex-col items-center gap-8 pb-5;
   }
 
   .page-heading {

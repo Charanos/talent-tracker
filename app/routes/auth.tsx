@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router";
-import Navbar from "~/components/Navbar";
 import { usePuterStore } from "~/lib/puter";
+import { useLocation, useNavigate } from "react-router";
 
 export const meta = () => {
   return [
@@ -28,13 +27,13 @@ const auth = () => {
   return (
     <main className="min-h-screen flex items-center justify-center">
       <div className="gradient-border shadow-lg">
-        <section className="flex flex-col items-center text-center gap-2 rounded-2xl p-10">
-          <div className="flex flex-col gap-2 items-center text-center">
+        <section className="flex flex-col items-center text-center rounded-2xl p-10">
+          <div className="flex flex-col items-center text-center">
             <h1>Welcome</h1>
             <h2>Login to your account</h2>
           </div>
 
-          <div className="">
+          <div className="mt-8 mb-2">
             {isLoading ? (
               <button className="auth-button animate-pulse">
                 <p className="monty uppercase">signing you in</p>

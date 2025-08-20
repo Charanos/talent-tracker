@@ -35,7 +35,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto main-section">
         <Hero />
         {resumes.length > 0 && (
-          <div className="resumes-section mb-20">
+          <div className="resumes-section mb-20 px-6 sm:px-0">
             {resumes.map((resume) => {
               return <ResumeCard key={resume.id} resume={resume} />;
             })}
