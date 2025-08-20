@@ -7,8 +7,8 @@ import {
   ScrollRestoration,
 } from "react-router";
 
-import type { Route } from "./+types/root";
 import "./app.css";
+import type { Route } from "./+types/root";
 import { usePuterStore } from "./lib/puter";
 import { useEffect } from "react";
 
