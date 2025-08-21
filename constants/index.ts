@@ -1,4 +1,4 @@
-export const resumes: Resume[] = [
+export const resumes: CandidateProfile[] = [
     {
       id: "1",
       companyName: "Google",
@@ -232,15 +232,15 @@ export const resumes: Resume[] = [
     jobTitle: string;
     jobDescription: string;
   }) =>
-    `You are an expert in ATS (Applicant Tracking System) and resume analysis.
-    Please analyze and rate this resume and suggest how to improve it.
-    The rating can be low if the resume is bad.
-    Be thorough and detailed. Don't be afraid to point out any mistakes or areas for improvement.
-    If there is a lot to improve, don't hesitate to give low scores. This is to help the user to improve their resume.
-    If available, use the job description for the job user is applying to to give more detailed feedback.
-    If provided, take the job description into consideration.
-    The job title is: ${jobTitle}
-    The job description is: ${jobDescription}
-    Provide the feedback using the following format: ${AIResponseFormat}
+    `You are an expert in technical talent assessment and developer profile evaluation for Andishi's talent pipeline.
+    Please analyze this developer profile for role-fit and technical alignment.
+    Evaluate the candidate's suitability for inclusion in Andishi's talent pool.
+    Be thorough and objective in your assessment. Focus on technical competencies, experience quality, and role alignment.
+    If the profile has significant gaps or misalignments, provide honest scores to help improve candidate selection.
+    Consider ATS readiness for potential client opportunities.
+    Use the provided role requirements to assess fit and alignment.
+    The target role is: ${jobTitle}
+    The role requirements are: ${jobDescription}
+    Provide the evaluation using the following format: ${AIResponseFormat}
     Return the analysis as a JSON object, without any other text and without the backticks.
     Do not include any other text or comments.`;

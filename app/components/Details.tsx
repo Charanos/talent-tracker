@@ -24,12 +24,12 @@ const Details = ({ feedback }: DetailsProps) => {
   const sections = [
     {
       id: "tone-style",
-      title: "Tone & Style",
+      title: "Communication & Presentation",
       icon: <Palette className="w-5 h-5" />,
       score: feedback.toneAndStyle.score,
       tips: feedback.toneAndStyle.tips,
       description:
-        "Writing tone, language style, and professional presentation",
+        "Technical communication, language clarity, and professional presentation",
     },
     {
       id: "content",
@@ -37,7 +37,8 @@ const Details = ({ feedback }: DetailsProps) => {
       icon: <FileText className="w-5 h-5" />,
       score: feedback.content.score,
       tips: feedback.content.tips,
-      description: "Relevance, completeness, and quality of information",
+      description:
+        "Role relevance, technical depth, and quality of experience",
     },
     {
       id: "structure",
@@ -45,7 +46,8 @@ const Details = ({ feedback }: DetailsProps) => {
       icon: <Layout className="w-5 h-5" />,
       score: feedback.structure.score,
       tips: feedback.structure.tips,
-      description: "Organization, formatting, and visual hierarchy",
+      description:
+        "Profile organization, formatting, and information hierarchy",
     },
     {
       id: "skills",
@@ -53,7 +55,8 @@ const Details = ({ feedback }: DetailsProps) => {
       icon: <Code className="w-5 h-5" />,
       score: feedback.skills.score,
       tips: feedback.skills.tips,
-      description: "Technical skills, keywords, and competency presentation",
+      description:
+        "Technical stack alignment, core competencies, and skill relevance",
     },
   ];
 
@@ -66,9 +69,9 @@ const Details = ({ feedback }: DetailsProps) => {
   return (
     <div className="w-full bg-black/10 border border-gray-900/90 backdrop-blur-lg rounded-2xl shadow-md p-6">
       <div className="mb-6">
-        <h2 className="text-xl font-semibold monty mb-2">Detailed Analysis</h2>
+        <h2 className="text-xl font-semibold monty mb-2">Detailed Evaluation</h2>
         <p className="text-sm text-gray-400">
-          Comprehensive breakdown of your resume's performance across key areas
+          Comprehensive breakdown of candidate profile performance across key areas
         </p>
       </div>
 
@@ -209,7 +212,7 @@ const Details = ({ feedback }: DetailsProps) => {
                   {section.tips.length === 0 && (
                     <div className="text-center py-6">
                       <p className="text-gray-400 text-sm">
-                        No specific feedback available for this section
+                        No specific evaluation feedback available for this section
                       </p>
                     </div>
                   )}

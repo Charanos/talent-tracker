@@ -41,9 +41,9 @@ const ATS = ({ score, suggestions }: ATSProps) => {
             <Bot className="w-6 h-6 text-blue-400" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold monty">ATS Compatibility</h2>
+            <h2 className="text-xl font-semibold monty">ATS Readiness</h2>
             <p className="text-sm text-gray-400">
-              Applicant Tracking System Analysis
+              Compatibility with Hiring Partner Systems
             </p>
           </div>
         </div>
@@ -60,7 +60,7 @@ const ATS = ({ score, suggestions }: ATSProps) => {
               <ScoreBadge score={score} />
             </div>
             <p className="text-xs text-gray-400 monty uppercase tracking-wide">
-              ATS Score
+              ATS Readiness Score
             </p>
           </div>
         </div>
@@ -158,7 +158,7 @@ const ATS = ({ score, suggestions }: ATSProps) => {
       {suggestions.length === 0 && (
         <div className="text-center py-8">
           <AlertTriangle className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-          <p className="text-gray-400">No ATS suggestions available</p>
+          <p className="text-gray-400">No ATS readiness feedback available</p>
         </div>
       )}
     </div>

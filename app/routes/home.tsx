@@ -5,14 +5,15 @@ import type { Route } from "./+types/home";
 import { usePuterStore } from "~/lib/puter";
 import { useEffect, useState } from "react";
 import ResumeCard from "~/components/ResumeCard";
+import Pagination from "~/components/Pagination";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "Andishi - Talent Tracker" },
+    { title: "Andishi - Talent Pipeline" },
     {
       name: "description",
       content:
-        "An AI-powered Resume Analyzer with React, React Router, and Puter.js! Create job listings, upload candidate resumes, and use AI to automatically evaluate and match resumes to job requirements.",
+        "AI-powered developer talent vetting and pipeline management for Andishi. Evaluate candidate profiles, assess role-fit, and streamline the talent pool selection process with comprehensive ATS readiness scoring.",
     },
   ];
 }
@@ -20,8 +21,10 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const navigate = useNavigate();
   const { auth, kv } = usePuterStore();
-  const [resumes, setResumes] = useState<Resume[]>([]);
+  const [resumes, setResumes] = useState<CandidateProfile[]>([]);
   const [loadingResumes, setLoadingResumes] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const resumesPerPage = 5;
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -32,10 +35,10 @@ export default function Home() {
   useEffect(() => {
     const loadResumes = async () => {
       setLoadingResumes(true);
-      const resumes = (await kv.list("resume:*", true)) as KVItem[];
+      const resumeData = (await kv.list("resume:*", true)) as KVItem[];
 
-      const parsedResumes = resumes.map(
-        (resume) => JSON.parse(resume.value) as Resume
+      const parsedResumes = resumeData.map(
+        (resume) => JSON.parse(resume.value) as CandidateProfile
       );
       setResumes(parsedResumes || []);
       setLoadingResumes(false);
@@ -47,7 +50,7 @@ export default function Home() {
     <main>
       <Navbar />
 
-      <section className="max-w-7xl mx-auto main-section">
+      <section className="max-w-8xl mx-auto main-section">
         <Hero />
 
         {loadingResumes && (
@@ -55,22 +58,36 @@ export default function Home() {
             <img
               src="/images/resume-scan-2.gif"
               className="w-64 h-64"
-              alt="resume-scan"
+              alt="loading-profiles"
             />
           </div>
         )}
 
         {!loadingResumes && resumes.length > 0 && (
           <div className="resumes-section mb-20 px-6 sm:px-0">
-            {resumes.map((resume) => {
-              return <ResumeCard key={resume.id} resume={resume} />;
-            })}
+            {resumes
+              .slice(
+                (currentPage - 1) * resumesPerPage,
+                currentPage * resumesPerPage
+              )
+              .map((resume) => {
+                return <ResumeCard key={resume.id} resume={resume} />;
+              })}
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(resumes.length / resumesPerPage)}
+              onPageChange={setCurrentPage}
+            />
           </div>
         )}
 
         {!loadingResumes && resumes?.length === 0 && (
-          <div className="flex justify-center items-center flex-col my-22 monty uppercase">
-            <p className="text-2xl">No resumes found</p>
+          <div className="flex justify-center items-center gap-2 flex-col my-22 monty uppercase">
+            <h2 className="!text-2xl">No candidate profiles in pipeline</h2>
+            <p className="!text-base">
+              Click "Analyze Resume" to begin vetting developer profiles
+            </p>
           </div>
         )}
       </section>

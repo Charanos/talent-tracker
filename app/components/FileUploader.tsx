@@ -77,7 +77,7 @@ const FileUploader = ({ onFileSelect }: FileUploaderProps) => {
 
               <p className="text-md text-gray-300">
                 <span className="font-medium">Click to upload</span> or Drag and
-                drop your resume here
+                drop candidate profile here
               </p>
 
               <p className="text-sm text-gray-400">

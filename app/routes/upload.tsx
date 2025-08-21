@@ -9,10 +9,11 @@ import { prepareInstructions } from "../../constants";
 
 export const meta = () => {
   return [
-    { title: "Andishi - Uploads" },
+    { title: "Andishi - Analyze Resume" },
     {
       name: "description",
-      content: "Upload your resume to start using Andishi - Talent Tracker",
+      content:
+        "Add developer profiles to Andishi's talent pipeline for comprehensive vetting and evaluation",
     },
   ];
 };
@@ -41,24 +42,25 @@ const upload = () => {
   }) => {
     setIsProcessing(true);
 
-    setStatusText("Uploading the file...");
+    setStatusText("Processing candidate profile...");
     const uploadedFile = await fs.upload([file]);
-    if (!uploadedFile) return setStatusText("Error: Failed to upload file");
+    if (!uploadedFile) return setStatusText("Error: Failed to process profile");
 
-    setStatusText("Converting to image...");
+    setStatusText("Preparing for evaluation...");
     const imageFile = await convertPdfToImage(file);
     if (!imageFile.file) {
-      console.error("PDF conversion error:", imageFile.error);
+      console.error("Profile conversion error:", imageFile.error);
       return setStatusText(
-        `Error: ${imageFile.error || "Failed to convert PDF to image"}`
+        `Error: ${imageFile.error || "Failed to prepare profile for evaluation"}`
       );
     }
 
-    setStatusText("Uploading the image...");
+    setStatusText("Finalizing profile data...");
     const uploadedImage = await fs.upload([imageFile.file]);
-    if (!uploadedImage) return setStatusText("Error: Failed to upload image");
+    if (!uploadedImage)
+      return setStatusText("Error: Failed to finalize profile");
 
-    setStatusText("Preparing data...");
+    setStatusText("Initializing vetting pipeline...");
     const uuid = generateUUID();
     const data = {
       id: uuid,
@@ -71,13 +73,14 @@ const upload = () => {
     };
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
 
-    setStatusText("Analyzing...");
+    setStatusText("Evaluating candidate profile...");
 
     const feedback = await ai.feedback(
       uploadedFile.path,
       prepareInstructions({ jobTitle, jobDescription })
     );
-    if (!feedback) return setStatusText("Error: Failed to analyze resume");
+    if (!feedback)
+      return setStatusText("Error: Failed to evaluate candidate profile");
 
     const feedbackText =
       typeof feedback.message.content === "string"
@@ -86,7 +89,7 @@ const upload = () => {
 
     data.feedback = JSON.parse(feedbackText);
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
-    setStatusText("Analysis complete, redirecting...");
+    setStatusText("Candidate evaluation complete, redirecting...");
     navigate(`/resume/${uuid}`);
   };
 
@@ -96,11 +99,13 @@ const upload = () => {
     if (!form) return;
     const formData = new FormData(form);
 
-    const companyName = formData.get("company-name") as string;
-    const jobTitle = formData.get("job-title") as string;
+    const jobTitleInput = formData.get("job-title") as string;
     const jobDescription = formData.get("job-description") as string;
 
     if (!file) return;
+
+    const companyName = "Andishi";
+    const jobTitle = jobTitleInput || "";
 
     handleAnalyze({ companyName, jobTitle, jobDescription, file });
   };
@@ -111,19 +116,22 @@ const upload = () => {
 
       <section className="max-w-7xl mx-auto main-section px-6 sm:px-0">
         <div className="page-heading py-22 capitalize">
-          <h1>smart feedback for your dream job</h1>
+          <h1>Developer Profile Vetting Pipeline</h1>
 
           {isProcessing ? (
             <>
               <h2>{statusText}</h2>
               <img
                 src="/images/resume-scan.gif"
-                alt="resume scan"
+                alt="profile evaluation"
                 className="w-full max-w-[400px] h-[400px]"
               />
             </>
           ) : (
-            <h2>share your resume for an ATS score and improvement tips</h2>
+            <h2>
+              Add candidate profiles for comprehensive role-fit evaluation and
+              ATS readiness assessment
+            </h2>
           )}
 
           {!isProcessing && (
@@ -132,46 +140,39 @@ const upload = () => {
               onSubmit={handleSubmit}
             >
               <div className="form-div">
-                <label htmlFor="company-name">Company Name</label>
-
-                <input
-                  type="text"
-                  name="company-name"
-                  placeholder="Company Name"
-                  id="company-name"
-                />
-              </div>
-
-              <div className="form-div">
-                <label htmlFor="job-title">Job Title</label>
+                <label htmlFor="job-title">Target Role</label>
 
                 <input
                   type="text"
                   name="job-title"
-                  placeholder="Job Title"
+                  placeholder="Developer Role Title"
                   id="job-title"
                 />
               </div>
 
               <div className="form-div">
-                <label htmlFor="job-description">Job Description</label>
+                <label htmlFor="job-description">Role Requirements</label>
 
                 <textarea
                   rows={5}
                   name="job-description"
-                  placeholder="Job Description"
+                  placeholder="Technical requirements and expectations"
                   id="job-description"
                 />
               </div>
 
               <div className="form-div">
-                <label htmlFor="resume">Uploader</label>
+                <label htmlFor="resume">Candidate Profile</label>
 
                 <FileUploader onFileSelect={handleFileSelect} />
               </div>
 
-              <button className="primary-button" type="submit">
-                Analyze Resume
+              <button
+                type="submit"
+                className="primary-button mt-2"
+                disabled={!file}
+              >
+                Evaluate Candidate
               </button>
             </form>
           )}

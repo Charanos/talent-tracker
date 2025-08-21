@@ -17,21 +17,21 @@ const FeedbackTabs = ({ feedback }: FeedbackTabsProps) => {
   const tabs = [
     {
       id: "summary" as const,
-      label: "Summary",
+      label: "Profile Summary",
       icon: <FileText className="w-4 h-4" />,
-      description: "Overview & scores",
+      description: "Overview & fit scores",
     },
     {
       id: "ats" as const,
-      label: "ATS Analysis",
+      label: "ATS Readiness",
       icon: <Target className="w-4 h-4" />,
-      description: "System compatibility",
+      description: "System compatibility check",
     },
     {
       id: "details" as const,
-      label: "Detailed Review",
+      label: "Detailed Evaluation",
       icon: <ListChecks className="w-4 h-4" />,
-      description: "In-depth feedback",
+      description: "In-depth assessment",
     },
   ];
 

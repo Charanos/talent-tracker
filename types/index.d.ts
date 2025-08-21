@@ -1,16 +1,16 @@
-interface Job {
+interface Role {
     title: string;
     description: string;
     location: string;
     requiredSkills: string[];
   }
   
-  interface Resume {
+  interface CandidateProfile {
     id: string;
-    companyName?: string;
-    jobTitle?: string;
-    imagePath: string;
-    resumePath: string;
+    companyName?: string; // Always "Andishi" for internal vetting
+    jobTitle?: string; // Target role for candidate
+    imagePath: string; // Profile preview image
+    resumePath: string; // Original PDF profile
     feedback: Feedback;
   }
   

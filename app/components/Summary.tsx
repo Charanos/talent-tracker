@@ -41,7 +41,7 @@ const Category = ({ title, score }: { title: string; score: number }) => {
           
           {/* Score percentage indicator */}
           <div className="text-xs text-gray-400 monty">
-            {score > 69 ? "Excellent" : score > 49 ? "Good" : "Improve"}
+            {score > 69 ? "Strong Fit" : score > 49 ? "Moderate Fit" : "Needs Review"}
           </div>
         </div>
 
@@ -76,16 +76,16 @@ const Summary = ({ feedback }: { feedback: Feedback }) => {
       <div className="flex flex-row max-sm:flex-col items-center gap-8 mb-8">
         <ScoreGauge score={feedback.overallScore} />
         <div className="flex flex-col gap-2">
-          <h2 className="text-2xl font-semibold">Your Resume Score</h2>
+          <h2 className="text-2xl font-semibold">Candidate Fit Score</h2>
           <p className="text-sm text-gray-400">
-            This score is calculated based on the variables listed below.
+            Overall assessment based on role requirements and profile analysis.
           </p>
         </div>
       </div>
 
       {/* Category Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Category title="Tone & Style" score={feedback.toneAndStyle.score} />
+        <Category title="Communication & Presentation" score={feedback.toneAndStyle.score} />
         <Category title="Content" score={feedback.content.score} />
         <Category title="Structure" score={feedback.structure.score} />
         <Category title="Skills" score={feedback.skills.score} />

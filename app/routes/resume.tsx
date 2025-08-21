@@ -6,10 +6,10 @@ import { useNavigate, Link, useParams } from "react-router";
 
 export const meta = () => {
   return [
-    { title: "Andishi - Resume" },
+    { title: "Andishi - Candidate Profile" },
     {
       name: "description",
-      content: "View your resume analysis - Talent Tracker",
+      content: "View comprehensive candidate evaluation and role-fit assessment - Andishi Talent Pipeline",
     },
   ];
 };
@@ -62,7 +62,7 @@ const resume = () => {
       <nav className="absolute top-0 z-50 w-full resume-nav">
         <Link to="/" className="back-button">
           <ArrowLeft className="size-4" />
-          <span className="text-xs monty uppercase">back to home</span>
+          <span className="text-xs monty uppercase">back to pipeline</span>
         </Link>
       </nav>
 
@@ -80,8 +80,8 @@ const resume = () => {
               <a href={resumeUrl} target="_blank" rel="noopener noreferrer">
                 <img
                   src={imageUrl}
-                  alt="resume"
-                  title="resume"
+                  alt="candidate-profile"
+                  title="candidate-profile"
                   className="w-full h-full object-contain"
                 />
               </a>
@@ -90,14 +90,14 @@ const resume = () => {
         </section>
 
         <section className="feedback-section">
-          <h2 className="capitalize !text-2xl">resume review</h2>
+          <h2 className="capitalize !text-2xl">Candidate Evaluation Report</h2>
 
           {feedback ? (
             <div className="animate-in fade-in duration-500">
               <FeedbackTabs feedback={feedback} />
             </div>
           ) : (
-            <img src="/images/resume-scan-2.gif" alt="resume-scan" />
+            <img src="/images/resume-scan-2.gif" alt="profile-loading" />
           )}
         </section>
       </div>
