@@ -11,6 +11,8 @@ import {
   Code,
   CheckCircle2,
   Lightbulb,
+  Plus,
+  Minus,
 } from "lucide-react";
 import ScoreBadge from "./ScoreBadge";
 
@@ -70,7 +72,7 @@ const Details = ({ feedback }: DetailsProps) => {
         </p>
       </div>
 
-      <Accordion allowMultiple className="space-y-3">
+      <Accordion className="space-y-3">
         {sections.map((section) => {
           const goodTips = section.tips.filter((tip) => tip.type === "good");
           const improveTips = section.tips.filter(
@@ -86,35 +88,41 @@ const Details = ({ feedback }: DetailsProps) => {
               <AccordionHeader
                 itemId={section.id}
                 className="hover:bg-white/5 transition-colors duration-200"
+                icon={(isActive) => (
+                  <div className="flex items-center justify-end gap-2 w-40 h-8 shrink-0">
+                    <span
+                      className={`w-14 text-right text-xl font-bold monty leading-none tabular-nums ${getScoreColor(
+                        section.score
+                      )}`}
+                    >
+                      {section.score}%
+                    </span>
+                    <ScoreBadge score={section.score} />
+                    {isActive ? (
+                      <Minus className="w-5 h-5 text-gray-400" />
+                    ) : (
+                      <Plus className="w-5 h-5 text-gray-400" />
+                    )}
+                  </div>
+                )}
               >
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-white/10 rounded-lg">
                       {section.icon}
                     </div>
-                    <div>
+                    <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-3 mb-1">
                         <h3 className="text-lg font-semibold monty">
                           {section.title}
                         </h3>
-                        <ScoreBadge score={section.score} />
                       </div>
                       <p className="text-xs text-gray-400">
                         {section.description}
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
-                      <span
-                        className={`text-xl font-bold monty ${getScoreColor(
-                          section.score
-                        )}`}
-                      >
-                        {section.score}%
-                      </span>
-                    </div>
-                  </div>
+                  {/** right cluster moved to AccordionHeader.icon render function for consistent alignment */}
                 </div>
               </AccordionHeader>
 

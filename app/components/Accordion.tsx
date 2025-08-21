@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import React, { createContext, useContext, useState } from "react";
+import { Plus, Minus } from "lucide-react";
 import { cn } from "~/lib/utils";
 
 interface AccordionContextType {
@@ -82,7 +83,8 @@ interface AccordionHeaderProps {
   itemId: string;
   children: ReactNode;
   className?: string;
-  icon?: ReactNode;
+  // icon can be a node or a render function that receives the active state
+  icon?: ReactNode | ((isActive: boolean) => ReactNode);
   iconPosition?: "left" | "right";
 }
 
@@ -96,24 +98,14 @@ export const AccordionHeader: React.FC<AccordionHeaderProps> = ({
   const { toggleItem, isItemActive } = useAccordion();
   const isActive = isItemActive(itemId);
 
-  const defaultIcon = (
-    <svg
-      className={cn("w-5 h-5 transition-transform duration-200", {
-        "rotate-180": isActive,
-      })}
-      fill="none"
-      stroke="#98A2B3"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M19 9l-7 7-7-7"
-      />
-    </svg>
+  const defaultIcon = isActive ? (
+    <Minus className="w-5 h-5 transition-all duration-200 text-gray-400" />
+  ) : (
+    <Plus className="w-5 h-5 transition-all duration-200 text-gray-400" />
   );
+
+  const renderedIcon =
+    typeof icon === "function" ? (icon as (a: boolean) => ReactNode)(isActive) : (icon || defaultIcon);
 
   const handleClick = () => {
     toggleItem(itemId);
@@ -130,10 +122,10 @@ export const AccordionHeader: React.FC<AccordionHeaderProps> = ({
       `}
     >
       <div className="flex items-center space-x-3">
-        {iconPosition === "left" && (icon || defaultIcon)}
+        {iconPosition === "left" && renderedIcon}
         <div className="flex-1">{children}</div>
       </div>
-      {iconPosition === "right" && (icon || defaultIcon)}
+      {iconPosition === "right" && renderedIcon}
     </button>
   );
 };
