@@ -27,10 +27,10 @@ export default function Home() {
   const resumesPerPage = 5;
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
+    if (!auth.isAuthenticated && !auth.user && !loadingResumes) {
       navigate("/auth?next=/");
     }
-  }, [auth.isAuthenticated]);
+  }, [auth.isAuthenticated, auth.user, loadingResumes]);
 
   useEffect(() => {
     const loadResumes = async () => {
@@ -83,8 +83,10 @@ export default function Home() {
         )}
 
         {!loadingResumes && resumes?.length === 0 && (
-          <div className="flex justify-center items-center gap-2 flex-col my-22 monty uppercase">
-            <h2 className="!text-2xl">No candidate profiles in pipeline</h2>
+          <div className="flex justify-center items-center gap-4 flex-col my-22">
+            <h2 className="!text-2xl monty uppercase text-center">
+              Reviewed profiles will appear here
+            </h2>
             <p className="!text-base">
               Click "Analyze Resume" to begin vetting developer profiles
             </p>

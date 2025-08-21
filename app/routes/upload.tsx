@@ -69,28 +69,104 @@ const upload = () => {
       companyName,
       jobTitle,
       jobDescription,
-      feedback: "",
+      feedback: {} as Feedback,
     };
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
 
     setStatusText("Evaluating candidate profile...");
 
-    const feedback = await ai.feedback(
-      uploadedFile.path,
-      prepareInstructions({ jobTitle, jobDescription })
-    );
-    if (!feedback)
-      return setStatusText("Error: Failed to evaluate candidate profile");
+    let feedback: any;
+    try {
+      feedback = await ai.feedback(
+        uploadedFile.path,
+        prepareInstructions({ jobTitle, jobDescription })
+      );
+      
+      console.log("AI feedback received:", feedback);
+      
+      if (!feedback) {
+        console.error("AI feedback returned null/undefined");
+        return setStatusText("Error: Failed to evaluate candidate profile - AI service unavailable");
+      }
 
-    const feedbackText =
-      typeof feedback.message.content === "string"
-        ? feedback.message.content
-        : feedback.message.content[0].text;
+      // Check if the response indicates an error
+      if (feedback.success === false || feedback.error) {
+        console.error("AI service error:", feedback.error);
+        
+        // Handle specific error types
+        if (feedback.error?.code === 'error_400_from_delegate' || 
+            feedback.error?.message?.includes('Permission denied') ||
+            feedback.error?.message?.includes('usage-limited-chat') ||
+            feedback.error?.message?.includes('401') ||
+            feedback.error?.message?.includes('Unauthorized')) {
+          return setStatusText("Error: AI service access denied. Please sign in to Puter and ensure you have AI credits available.");
+        }
+        
+        if (feedback.error?.message?.includes('rate limit') ||
+            feedback.error?.message?.includes('quota')) {
+          return setStatusText("Error: AI service usage limit reached. Please try again later.");
+        }
+        
+        const errorMessage = feedback.error?.message || feedback.error || "AI service unavailable";
+        return setStatusText(`Error: ${errorMessage}`);
+      }
 
-    data.feedback = JSON.parse(feedbackText);
-    await kv.set(`resume:${uuid}`, JSON.stringify(data));
-    setStatusText("Candidate evaluation complete, redirecting...");
-    navigate(`/resume/${uuid}`);
+      // Check if we have the expected message structure
+      if (!feedback.message || !feedback.message.content) {
+        console.error("Unexpected AI response format:", feedback);
+        return setStatusText("Error: Invalid response from AI service - please try again");
+      }
+      
+      let feedbackText: string;
+      try {
+        feedbackText = typeof feedback.message.content === "string"
+          ? feedback.message.content
+          : feedback.message.content[0]?.text || JSON.stringify(feedback.message.content);
+      } catch (parseError) {
+        console.error("Error parsing AI response content:", parseError);
+        return setStatusText("Error: Unable to parse AI response - please try again");
+      }
+
+      try {
+        data.feedback = JSON.parse(feedbackText);
+      } catch (jsonError) {
+        console.error("Error parsing JSON from AI response:", jsonError);
+        console.log("Raw feedback text:", feedbackText);
+        // Store a fallback feedback structure if JSON parsing fails
+        data.feedback = {
+          overallScore: 0,
+          ATS: { score: 0, tips: [{ type: "improve" as const, tip: "Unable to parse AI response. Please try again." }] },
+          toneAndStyle: { score: 0, tips: [{ type: "improve" as const, tip: "Response parsing failed", explanation: feedbackText }] },
+          content: { score: 0, tips: [{ type: "improve" as const, tip: "Response parsing failed", explanation: "AI service returned invalid format" }] },
+          structure: { score: 0, tips: [{ type: "improve" as const, tip: "Response parsing failed", explanation: "Please try uploading again" }] },
+          skills: { score: 0, tips: [{ type: "improve" as const, tip: "Response parsing failed", explanation: "AI analysis incomplete" }] }
+        };
+      }
+      
+      await kv.set(`resume:${uuid}`, JSON.stringify(data));
+      setStatusText("Candidate evaluation complete, redirecting...");
+      navigate(`/resume/${uuid}`);
+    } catch (error) {
+      console.error("AI feedback error:", error);
+      
+      // Handle specific error types
+      if (error instanceof Error) {
+        if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+          return setStatusText("Error: Authentication required. Please sign in to Puter to use AI services.");
+        }
+        if (error.message.includes('403') || error.message.includes('Forbidden')) {
+          return setStatusText("Error: Access denied to AI service. Please check your Puter account permissions.");
+        }
+        if (error.message.includes('429') || error.message.includes('rate limit')) {
+          return setStatusText("Error: Too many requests. Please wait a moment and try again.");
+        }
+        if (error.message.includes('network') || error.message.includes('fetch')) {
+          return setStatusText("Error: Network connection issue. Please check your internet and try again.");
+        }
+      }
+      
+      return setStatusText(`Error: ${error instanceof Error ? error.message : 'Failed to evaluate candidate profile'}`);
+    }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -116,7 +192,9 @@ const upload = () => {
 
       <section className="max-w-7xl mx-auto main-section px-6 sm:px-0">
         <div className="page-heading py-22 capitalize">
-          <h1>Developer Profile Vetting Pipeline</h1>
+          <h1 className="mb-6 !text-4xl sm:!text-5xl leading-tight">
+            Developer Profile Vetting Pipeline
+          </h1>
 
           {isProcessing ? (
             <>
@@ -128,10 +206,12 @@ const upload = () => {
               />
             </>
           ) : (
-            <h2>
-              Add candidate profiles for comprehensive role-fit evaluation and
-              ATS readiness assessment
-            </h2>
+            <p className="text-base sm:text-xl text-gray-300 mb-6 leading-relaxed max-w-6xl">
+              Add candidate CVs or paste profile links to receive structured
+              evaluations tailored for Andishi's developer talent pipeline —
+              role-fit scores, strengths & gaps, ATS readiness, recommended
+              interview questions, and suggested next steps for shortlisting.
+            </p>
           )}
 
           {!isProcessing && (

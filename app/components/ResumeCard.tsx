@@ -49,32 +49,35 @@ const ResumeCard = ({ resume }: { resume: CandidateProfile }) => {
     return "text-red-400";
   };
 
-  // Top evaluation categories
+  // Top evaluation categories with defensive checks
   const categories = {
-    "Role Fit": { score: resume.feedback.ATS.score, icon: Target },
-    Skills: { score: resume.feedback.skills.score, icon: Star },
-    Structure: { score: resume.feedback.structure.score, icon: Building2 },
-    Content: { score: resume.feedback.content.score, icon: FileText },
+    "Role Fit": { score: resume.feedback.ATS?.score || 0, icon: Target },
+    Skills: { score: resume.feedback.skills?.score || 0, icon: Star },
+    Structure: {
+      score: resume.feedback.structure?.score || 0,
+      icon: Building2,
+    },
+    Content: { score: resume.feedback.content?.score || 0, icon: FileText },
   };
 
   const topCategories = Object.entries(categories)
-    .sort(([, a], [, b]) => b.score - a.score)
+    .sort(([, a], [, b]) => (b.score || 0) - (a.score || 0))
     .slice(0, 3);
 
   const improvementTips = [
-    ...resume.feedback.ATS.tips
+    ...(resume.feedback.ATS?.tips || [])
       .filter((tip) => tip.type === "improve")
       .slice(0, 1),
-    ...resume.feedback.content.tips
+    ...(resume.feedback.content?.tips || [])
       .filter((tip) => tip.type === "improve")
       .slice(0, 1),
   ].slice(0, 2);
 
   const strengths = [
-    ...resume.feedback.ATS.tips
+    ...(resume.feedback.ATS?.tips || [])
       .filter((tip) => tip.type === "good")
       .slice(0, 1),
-    ...resume.feedback.skills.tips
+    ...(resume.feedback.skills?.tips || [])
       .filter((tip) => tip.type === "good")
       .slice(0, 1),
   ].slice(0, 2);
@@ -169,20 +172,6 @@ const ResumeCard = ({ resume }: { resume: CandidateProfile }) => {
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* Meta Information */}
-            <div className="flex items-center gap-4 text-sm text-gray-400">
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                <span>{new Date(resume.id).toLocaleDateString()}</span>
-              </div>
-              <div
-                className={`flex items-center gap-1 font-medium ${getScoreColor(resume.feedback.overallScore)}`}
-              >
-                <TrendingUp className="w-3 h-3" />
-                <span>{resume.feedback.overallScore}% Match</span>
-              </div>
             </div>
           </div>
 

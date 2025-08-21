@@ -22,13 +22,6 @@ const EnhancedHeroSection = () => {
     { number: "500+", label: "Hiring Partners", icon: Users },
   ];
 
-  const features = [
-    "AI-assisted vetting",
-    "Pipeline-ready scoring",
-    "Role-specific insights",
-    "CV standardization for ATS",
-  ];
-
   useEffect(() => {
     setIsVisible(true);
     const interval = setInterval(() => {
@@ -46,21 +39,21 @@ const EnhancedHeroSection = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-128 h-128 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 my-12">
         <div
           className={`page-heading transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 !bg-white/10 backdrop-blur-md rounded-full mb-6 group hover:scale-105 transition-transform duration-300">
+          <div className="sm:inline-flex hidden items-center gap-2 px-4 py-2 !bg-white/10 backdrop-blur-md rounded-full mb-6 group hover:scale-105 transition-transform duration-300">
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium text-gray-300 monty uppercase">
+            <span className="text-sm  font-medium text-gray-300 monty uppercase">
               AI-assisted • Pipeline-ready insights
             </span>
             <Zap className="w-4 h-4 text-yellow-400 group-hover:rotate-12 transition-transform duration-300" />
           </div>
 
           {/* Main Heading */}
-          <h1 className="mb-6 !text-5xl leading-tight">
+          <h1 className="mb-6 !text-4xl sm:!text-5xl leading-tight">
             Candidate Vetting &amp;
             <br />
             <span className="">
@@ -73,7 +66,7 @@ const EnhancedHeroSection = () => {
           <div
             className={`mb-8 transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
           >
-            <p className="text-xl text-gray-300 mb-6 leading-relaxed max-w-6xl">
+            <p className="text-base sm:text-xl text-gray-300 mb-6 leading-relaxed max-w-6xl">
               Add candidate CVs or paste profile links to receive structured
               evaluations tailored for Andishi's developer talent pipeline —
               role-fit scores, strengths & gaps, ATS readiness, recommended

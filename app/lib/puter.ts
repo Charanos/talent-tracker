@@ -119,7 +119,6 @@ export const usePuterStore = create<PuterStore>((set, get) => {
   const checkAuthStatus = async (): Promise<boolean> => {
     const puter = getPuter();
     if (!puter) {
-      setError("Puter.js not available");
       return false;
     }
 
@@ -158,6 +157,23 @@ export const usePuterStore = create<PuterStore>((set, get) => {
         return false;
       }
     } catch (err) {
+      if (err instanceof Error && err.message.includes('401')) {
+        set({
+          auth: {
+            user: null,
+            isAuthenticated: false,
+            signIn: get().auth.signIn,
+            signOut: get().auth.signOut,
+            refreshUser: get().auth.refreshUser,
+            checkAuthStatus: get().auth.checkAuthStatus,
+            getUser: () => null,
+          },
+          isLoading: false,
+          error: null,
+        });
+        return false;
+      }
+      
       const msg =
         err instanceof Error ? err.message : "Failed to check auth status";
       setError(msg);
@@ -245,7 +261,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
     const puter = getPuter();
     if (puter) {
       set({ puterReady: true });
-      checkAuthStatus();
+      setTimeout(() => checkAuthStatus(), 500);
       return;
     }
 
@@ -253,7 +269,7 @@ export const usePuterStore = create<PuterStore>((set, get) => {
       if (getPuter()) {
         clearInterval(interval);
         set({ puterReady: true });
-        checkAuthStatus();
+        setTimeout(() => checkAuthStatus(), 500);
       }
     }, 100);
 
@@ -350,7 +366,10 @@ export const usePuterStore = create<PuterStore>((set, get) => {
           ],
         },
       ],
-      { model: "claude-3-7-sonnet" }
+      { 
+        model: "gpt-4o-mini",
+        max_tokens: 8192
+      }
     ) as Promise<AIResponse | undefined>;
   };
 
